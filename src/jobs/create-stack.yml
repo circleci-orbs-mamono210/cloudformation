@@ -1,0 +1,45 @@
+  description: |
+    Install and configure aws-cli and execute aws cloudformation create-stack command
+
+  parameters:
+    stack-name:
+      description: |
+        CloudFormation stack name
+      type: string
+
+    template-file-path:
+      description: |
+        CloudFormation template file path
+      type: string
+
+    extra-arguments:
+      description: |
+        Optional additional arguments to pass to the `aws cloudformation create-stack` command
+      type: string
+      default: ""
+
+    git-url:
+      description: |
+        GitHub URL to retrieve CloudFormation template
+      type: string
+      default: ""
+
+    branch:
+      description: |
+        Git branch of retrieving GitHub URL of CloudFormation template file
+      type: string
+      default: "master"
+
+  executor:
+    name: default
+
+  steps:
+    - aws-cli/install
+    - aws-cli/configure
+    - checkout
+    - create-stack:
+        stack-name: <<parameters.stack-name>>
+        template-file-path: <<parameters.template-file-path>>
+        extra-arguments: <<parameters.extra-arguments>>
+        git-url: <<parameters.git-url>>
+        branch: <<parameters.branch>>

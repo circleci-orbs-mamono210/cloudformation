@@ -1,0 +1,21 @@
+  description: |
+   Delete existing stack
+
+  parameters:
+    stack-name:
+      description: |
+        CloudFormation stack name
+      type: string
+
+  steps:
+    - run:
+        name: Delete stack
+        command: |
+          aws cloudformation delete-stack \
+          --stack-name <<parameters.stack-name>>
+
+    - run:
+        name: Wait until stack status is DELETE_COMPLETE
+        command: |
+          aws cloudformation wait stack-delete-complete \
+          --stack-name <<parameters.stack-name>>

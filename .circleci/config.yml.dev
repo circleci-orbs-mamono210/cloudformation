@@ -1,0 +1,44 @@
+version: 2.1
+
+orbs:
+  orb-tools: circleci/orb-tools@8.20.0
+  cloudformation: orbss/aws-cloudformation@dev:alpha
+
+workflows:
+  version: 2
+  test-checkout:
+    jobs:
+      - orb-tools/pack
+      - orb-tools/publish-dev:
+          orb-name: orbss/aws-cloudformation
+          requires:
+            - orb-tools/pack
+      - cloudformation/create-stack:
+          stack-name: circleci-test-checkout
+          template-file-path: tests/checkout-test-cfn-template.yaml
+          extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
+          requires:
+            - orb-tools/publish-dev
+      - cloudformation/delete-stack:
+          requires:
+            - cloudformation/create-stack
+          stack-name: circleci-test-checkout
+
+  test-git-url:
+    jobs:
+      - orb-tools/pack
+      - orb-tools/publish-dev:
+          orb-name: orbss/aws-cloudformation
+          requires:
+            - orb-tools/pack
+      - cloudformation/create-stack:
+          stack-name: circleci-test-git-url
+          template-file-path: centos7-ubuntu18.yaml
+          git-url: https://github.com/aws-cloudformation-tm/ec2.git
+          extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
+          requires:
+            - orb-tools/publish-dev
+      - cloudformation/delete-stack:
+          requires:
+            - cloudformation/create-stack
+          stack-name: circleci-test-git-url

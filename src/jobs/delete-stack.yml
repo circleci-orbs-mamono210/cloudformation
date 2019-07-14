@@ -1,0 +1,17 @@
+  description: |
+    Install and configure aws-cli and execute aws cloudformation delete-stack command
+
+  parameters:
+    stack-name:
+      description: |
+        CloudFormation stack name
+      type: string
+
+  executor:
+    name: default
+
+  steps:
+    - aws-cli/install
+    - aws-cli/configure
+    - delete-stack:
+        stack-name: <<parameters.stack-name>>
