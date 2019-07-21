@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@8.20.0
-  cloudformation: orbss/aws-cloudformation@0.1.3
+  cloudformation: orbss/aws-cloudformation@0.1.4
 
 workflows:
   version: 2
@@ -15,9 +15,13 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
           aws-region: AWS_DEFAULT_REGION
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-      - cloudformation/delete-stack:
+      - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
+          stack-name: circleci-test-checkout
+      - cloudformation/delete-stack:
+          requires:
+            - cloudformation/describe-stacks
           stack-name: circleci-test-checkout
           aws-access-key-id: AWS_ACCESS_KEY_ID2
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
@@ -29,9 +33,13 @@ workflows:
           stack-name: circleci-test-checkout-2
           template-file-path: tests/checkout-test-cfn-template.yaml
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-      - cloudformation/delete-stack:
+      - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
+          stack-name: circleci-test-checkout-2
+      - cloudformation/delete-stack:
+          requires:
+            - cloudformation/describe-stacks
           stack-name: circleci-test-checkout-2
 
   test-git-url:
@@ -44,9 +52,13 @@ workflows:
           aws-region: AWS_DEFAULT_REGION
           git-url: https://github.com/aws-cloudformation-tm/ec2.git
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-      - cloudformation/delete-stack:
+      - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
+          stack-name: circleci-test-git-url
+      - cloudformation/delete-stack:
+          requires:
+            - cloudformation/describe-stacks
           stack-name: circleci-test-git-url
           aws-access-key-id: AWS_ACCESS_KEY_ID2
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
@@ -59,7 +71,11 @@ workflows:
           template-file-path: centos7-ubuntu18.yaml
           git-url: https://github.com/aws-cloudformation-tm/ec2.git
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-      - cloudformation/delete-stack:
+      - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
+          stack-name: circleci-test-git-url-2
+      - cloudformation/delete-stack:
+          requires:
+            - cloudformation/describe-stacks
           stack-name: circleci-test-git-url-2

@@ -3,6 +3,7 @@
 
   executor:
     name: default
+    python-version: "3.7.4"
 
   parameters:
     stack-name:
@@ -24,7 +25,7 @@
 
     extra-arguments:
       description: |
-        Optional additional arguments to pass to the `aws 
+        Optional additional arguments to pass to the `aws
         cloudformation create-stack` command
       type: string
       default: ""
@@ -65,7 +66,9 @@
 
     configure-default-region:
       description: |
-        Some AWS actions don't require a region; set this to false if you do not want to store a default region in ~/.aws/config
+        Some AWS actions don't require a region; set this to
+        false if you do not want to store a default region
+        in ~/.aws/config
       type: boolean
       default: true
 

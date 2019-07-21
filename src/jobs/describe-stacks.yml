@@ -1,5 +1,6 @@
   description: |
-    Install and configure aws-cli and execute aws cloudformation delete-stack command
+    Install and configure aws-cli and execute `aws cloudformation
+    describe-stacks` command
 
   executor:
     name: default
@@ -10,6 +11,14 @@
       description: |
         CloudFormation stack name
       type: string
+      default: ""
+
+    extra-arguments:
+      description: |
+        Optional additional arguments to pass to the `aws
+        cloudformation describe-stacks` command
+      type: string
+      default: ""
 
     aws-access-key-id:
       description: |
@@ -42,8 +51,8 @@
     configure-default-region:
       description: |
         Some AWS actions don't require a region; set this to
-        false if you do not want to store a default region in
-        ~/.aws/config
+        false if you do not want to store a default region
+        in ~/.aws/config
       type: boolean
       default: true
 
@@ -57,5 +66,6 @@
         profile-name: <<parameters.profile-name>>
         configure-default-region: <<parameters.configure-default-region>>
 
-    - delete-stack:
+    - describe-stacks:
         stack-name: <<parameters.stack-name>>
+        extra-arguments: <<parameters.extra-arguments>>

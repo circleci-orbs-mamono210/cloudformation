@@ -1,0 +1,26 @@
+  description: |
+    Returns the description for the specified stack; if no stack name
+    was specified, then it returns the description for all the stacks
+    created.
+
+  parameters:
+    stack-name:
+      description: |
+        CloudFormation stack name
+      type: string
+      default: ""
+
+    extra-arguments:
+      description: |
+        Optional additional arguments to pass to the
+        `aws cloudformation create-stack` command
+      type: string
+      default: ""
+
+  steps:
+    - run:
+        name: Describe stack
+        command: |
+          aws cloudformation describe-stacks \
+          --stack-name <<parameters.stack-name>> \
+          <<parameters.extra-arguments>>
