@@ -14,19 +14,23 @@
 
     extra-arguments:
       description: |
-        Optional additional arguments to pass to the `aws cloudformation create-stack` command
+        Optional additional arguments to pass to the
+        `aws cloudformation create-stack` command
       type: string
       default: ""
 
     branch:
       description: |
-        Git branch of retrieving GitHub URL of CloudFormation template file. This option becomes effictive only when parameter 'git-url' is specified.
+        Git branch of retrieving GitHub URL of CloudFormation template
+        file. This option becomes effictive only when parameter
+        'git-url' is specified.
       type: string
       default: "master"
 
     git-url:
       description: |
-        GitHub URL to retrieve CloudFormation template. If this parameter is not specified, checkout step is executed.
+        GitHub URL to retrieve CloudFormation template. If this
+        parameter is not specified, checkout step is executed.
       type: string
       default: ""
 

@@ -14,10 +14,7 @@ Configure and install AWS CLI and munipulate aws cloudformaiton command in Circl
 
 Register Access Key, Secret Access Key and default region to CircleCI Environment Variables section.
 
-
 ![AWS Access Key Registration](/images/aws-access-keys.png)
-
-If multiple CloudFormation settings are required and need to register more than one AWS Access information, create another GitHub repository. **Names of AWS access information environment variable are fixed and can not be changed**.
 
 ### Parameters and commands
 
