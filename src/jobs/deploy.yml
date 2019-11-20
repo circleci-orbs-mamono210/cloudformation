@@ -1,0 +1,111 @@
+  description: |
+    Install and configure aws-cli and execute aws cloudformation deploy command
+
+  executor:
+    name: default
+    python-version: "3.7.4"
+
+  parameters:
+    aws-access-key-id:
+      description: |
+        AWS access key id for IAM role. Set this to the name of
+        the environment variable you will use to hold this
+        value, i.e. AWS_ACCESS_KEY.
+      type: env_var_name
+      default: AWS_ACCESS_KEY_ID
+
+    aws-region:
+      description: |
+        Env var of AWS region to operate in
+        (defaults to AWS_DEFAULT_REGION)
+      type: env_var_name
+      default: AWS_DEFAULT_REGION
+
+    aws-secret-access-key:
+      description: |
+        AWS secret key for IAM role. Set this to the name of
+        the environment variable you will use to hold this
+        value, i.e. $AWS_SECRET_ACCESS_KEY.
+      type: env_var_name
+      default: AWS_SECRET_ACCESS_KEY
+
+    branch:
+      description: |
+        Git branch of retrieving GitHub URL of CloudFormation
+         template file
+      type: string
+      default: master
+
+    capabilities:
+      description: |
+        Space separated list of capabilities required by the CloudFormation template.
+        i.e. "CAPABILITY_AUTO_EXPAND CAPABILITY_IAM CAPABILITY_NAMED_IAM."
+      type: string
+      default: ""
+
+    configure-default-region:
+      description: |
+        Some AWS actions don't require a region; set this to
+        false if you do not want to store a default region
+        in ~/.aws/config
+      type: boolean
+      default: true
+
+    extra-arguments:
+      description: |
+        Optional additional arguments to pass to the `aws
+        cloudformation deploy` command
+      type: string
+      default: ""
+
+    git-url:
+      description: |
+        GitHub URL to retrieve CloudFormation template
+      type: string
+      default: ""
+
+    parameter-overrides:
+      description: |
+        A list of parameter structures specifying input
+        parameters to the stack. Parameters that are not specified
+        will use the stack's existing value.
+
+        Example: ParameterKey1=ParameterValue1 ParameterKey2=ParameterValue2
+      type: string
+      default: ""
+
+    profile-name:
+      description: Profile name to be configured.
+      type: string
+      default: "default"
+
+    stack-name:
+      description: |
+        CloudFormation stack name
+      type: string
+
+    template-file-path:
+      description: |
+        CloudFormation template file path
+      type: string
+
+  steps:
+    - aws-cli/install
+
+    - aws-cli/configure:
+        aws-access-key-id: <<parameters.aws-access-key-id>>
+        aws-secret-access-key: <<parameters.aws-secret-access-key>>
+        aws-region: <<parameters.aws-region>>
+        profile-name: <<parameters.profile-name>>
+        configure-default-region: <<parameters.configure-default-region>>
+
+    - checkout
+
+    - deploy:
+        stack-name: <<parameters.stack-name>>
+        template-file-path: <<parameters.template-file-path>>
+        extra-arguments: <<parameters.extra-arguments>>
+        git-url: <<parameters.git-url>>
+        branch: <<parameters.branch>>
+        parameter-overrides: <<parameters.parameter-overrides>>
+        capabilities: <<parameters.capabilities>>

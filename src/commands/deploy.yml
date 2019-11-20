@@ -1,0 +1,95 @@
+  description: |
+    Deploys a stack as specified in the template, using a change set.
+    Wait until stack status is UPDATE_COMPLETE.
+
+  parameters:
+    branch:
+      description: |
+        Git branch of retrieving GitHub URL of CloudFormation template
+        file. This option becomes effictive only when parameter
+        'git-url' is specified.
+      type: string
+      default: "master"
+
+    capabilities:
+      description: |
+        Space separated list of capabilities required by the
+        CloudFormation template, i.e. "CAPABILITY_IAM CAPABILITY_NAMED_IAM."
+      type: string
+      default: ""
+
+    extra-arguments:
+      description: |
+        Optional additional arguments to pass to the
+        `aws cloudformation create-stack` command
+      type: string
+      default: ""
+
+    git-url:
+      description: |
+        GitHub URL to retrieve CloudFormation template. If this
+        parameter is not specified, checkout step is executed.
+      type: string
+      default: ""
+
+    parameter-overrides:
+      description: |
+        A list of parameter structures specifying input
+        parameters to the stack. Parameters that are not specified
+        will use the stack's existing value.
+
+        Example: ParameterKey1=ParameterValue1 ParameterKey2=ParameterValue2
+      type: string
+      default: ""
+
+    stack-name:
+      description: |
+        CloudFormation stack name
+      type: string
+
+    template-file-path:
+      description: |
+        CloudFormation template file path
+      type: string
+
+  steps:
+    - run:
+        name: Custom checkout
+        command: |
+          if [ <<parameters.git-url>> != "" ]; then
+            mkdir ~/cfn-tmp
+            git clone <<parameters.git-url>> -b <<parameters.branch>> ~/cfn-tmp
+          fi
+
+    - run:
+        name: Deploy stack
+        command: |
+          if [ <<parameters.capabilities>> != "" ]; then
+            capabilities="--capabilities <<parameters.capabilities>>"
+          fi
+
+          if [ <<parameters.parameter-overrides>> != "" ]; then
+            parameter_overrides="--parameter-overrides <<parameters.parameter-overrides>>"
+          fi
+
+          if [ <<parameters.git-url>> != "" ]; then
+            aws cloudformation deploy \
+            --stack-name <<parameters.stack-name>> \
+            --template-file file:///home/circleci/cfn-tmp/<<parameters.template-file-path>> \
+            ${capabilities} \
+            ${parameter_overrides} \
+            <<parameters.extra-arguments>>
+          else
+            aws cloudformation deploy \
+            --stack-name <<parameters.stack-name>> \
+            --template-file file://<<parameters.template-file-path>> \
+            ${capabilities} \
+            ${parameter_overrides} \
+            <<parameters.extra-arguments>>
+          fi
+
+    - run:
+        name: Wait until Stack is created
+        command: |
+          aws cloudformation wait stack-update-complete \
+          --stack-name <<parameters.stack-name>>
