@@ -2,7 +2,7 @@
 
 # orbss/aws-cloudformation
 
-Configure and install AWS CLI and munipulate aws cloudformaiton command in CircleCI job
+Configure and install AWS CLI and manipulate aws cloudformation command in CircleCI job
 
 ## Dependencies
 

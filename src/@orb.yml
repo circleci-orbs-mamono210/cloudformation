@@ -1,7 +1,7 @@
 version: 2.1
 
 description: |
-  "Contorl AWS CloudFormation stack.
+  "Control AWS CloudFormation stack.
     See details @GitHub https://github.com/circleci-orbs-tm/cloudformation"
 
 orbs:
