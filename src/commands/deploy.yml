@@ -76,14 +76,14 @@
           if [ <<parameters.git-url>> != "" ]; then
             aws cloudformation deploy \
             --stack-name <<parameters.stack-name>> \
-            --template-file file:///home/circleci/cfn-tmp/<<parameters.template-file-path>> \
+            --template-file /home/circleci/cfn-tmp/<<parameters.template-file-path>> \
             ${capabilities} \
             ${parameter_overrides} \
             <<parameters.extra-arguments>>
           else
             aws cloudformation deploy \
             --stack-name <<parameters.stack-name>> \
-            --template-file file://<<parameters.template-file-path>> \
+            --template-file <<parameters.template-file-path>> \
             ${capabilities} \
             ${parameter_overrides} \
             <<parameters.extra-arguments>>
