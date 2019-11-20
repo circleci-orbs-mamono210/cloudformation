@@ -1,6 +1,7 @@
   description: |
     Deploys a stack as specified in the template, using a change set.
-    Wait until stack status is UPDATE_COMPLETE.
+    Deploying a change set automatically waits for the stack to successfully
+    reach UPDATE_COMPLETE.
 
   parameters:
     branch:
@@ -87,9 +88,3 @@
             ${parameter_overrides} \
             <<parameters.extra-arguments>>
           fi
-
-    - run:
-        name: Wait until Stack is created
-        command: |
-          aws cloudformation wait stack-update-complete \
-          --stack-name <<parameters.stack-name>>
