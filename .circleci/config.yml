@@ -2,12 +2,17 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@8.20.0
-  cloudformation: orbss/aws-cloudformation@0.1.4
+  cloudformation: orbss/aws-cloudformation@dev:alpha
 
 workflows:
   version: 2
   test-checkout:
     jobs:
+      - orb-tools/pack
+      - orb-tools/publish-dev:
+          orb-name: orbss/aws-cloudformation
+          requires:
+            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-checkout
           template-file-path: tests/checkout-test-cfn-template.yaml
@@ -15,6 +20,8 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
           aws-region: AWS_DEFAULT_REGION
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
+          requires:
+            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
@@ -29,10 +36,17 @@ workflows:
 
   test-checkout-2:
     jobs:
+      - orb-tools/pack
+      - orb-tools/publish-dev:
+          orb-name: orbss/aws-cloudformation
+          requires:
+            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-checkout-2
           template-file-path: tests/checkout-test-cfn-template.yaml
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
+          requires:
+            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
@@ -44,6 +58,11 @@ workflows:
 
   test-git-url:
     jobs:
+      - orb-tools/pack
+      - orb-tools/publish-dev:
+          orb-name: orbss/aws-cloudformation
+          requires:
+            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-git-url
           template-file-path: centos7-ubuntu18.yaml
@@ -52,6 +71,8 @@ workflows:
           aws-region: AWS_DEFAULT_REGION
           git-url: https://github.com/aws-cloudformation-tm/ec2.git
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
+          requires:
+            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
@@ -66,11 +87,18 @@ workflows:
 
   test-git-url-2:
     jobs:
+      - orb-tools/pack
+      - orb-tools/publish-dev:
+          orb-name: orbss/aws-cloudformation
+          requires:
+            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-git-url-2
           template-file-path: centos7-ubuntu18.yaml
           git-url: https://github.com/aws-cloudformation-tm/ec2.git
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
+          requires:
+            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
