@@ -34,6 +34,7 @@ workflows:
           aws-access-key-id: AWS_ACCESS_KEY_ID2
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
           aws-region: AWS_DEFAULT_REGION
+          parameter-overrides: InstanceType=t2.medium
       - cloudformation/delete-stack:
           requires:
             - cloudformation/deploy
