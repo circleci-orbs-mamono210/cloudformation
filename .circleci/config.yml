@@ -36,7 +36,7 @@ workflows:
           aws-region: AWS_DEFAULT_REGION
       - cloudformation/delete-stack:
           requires:
-            - cloudformation/describe-stacks
+            - cloudformation/deploy
           stack-name: circleci-test-checkout
           aws-access-key-id: AWS_ACCESS_KEY_ID2
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
