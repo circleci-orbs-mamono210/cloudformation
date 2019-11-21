@@ -87,7 +87,7 @@ workflows:
           stack-name: circleci-test-git-url
       - cloudformation/delete-stack:
           requires:
-            - cloudformation/deploy
+            - cloudformation/describe-stacks
           stack-name: circleci-test-git-url
           aws-access-key-id: AWS_ACCESS_KEY_ID2
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
