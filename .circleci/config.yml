@@ -26,6 +26,14 @@ workflows:
           requires:
             - cloudformation/create-stack
           stack-name: circleci-test-checkout
+      - cloudformation/deploy:
+          requires:
+            - cloudformation/describe-stacks
+          stack-name: circleci-test-git-url
+          template-file-path: tests/checkout-test-cfn-template.yaml
+          aws-access-key-id: AWS_ACCESS_KEY_ID2
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
+          aws-region: AWS_DEFAULT_REGION
       - cloudformation/delete-stack:
           requires:
             - cloudformation/describe-stacks
@@ -77,15 +85,6 @@ workflows:
           requires:
             - cloudformation/create-stack
           stack-name: circleci-test-git-url
-      - cloudformation/deploy:
-          requires:
-            - cloudformation/describe-stacks
-          stack-name: circleci-test-git-url
-          template-file-path: centos7-ubuntu18.yaml
-          aws-access-key-id: AWS_ACCESS_KEY_ID2
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
-          aws-region: AWS_DEFAULT_REGION
-          parameter-overrides: InstanceType=t2.medium
       - cloudformation/delete-stack:
           requires:
             - cloudformation/deploy
