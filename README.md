@@ -28,7 +28,7 @@ See details [CircleCI Orb Registry - orbss/aws-cloudformation](https://circleci.
 version: 2.1
 
 orbs:
-  cloudformation: orbss/aws-cloudformation@0.1.4
+  cloudformation: orbss/aws-cloudformation@0.1.6
 
 workflows:
   version: 2
@@ -52,7 +52,7 @@ workflows:
 version: 2.1
 
 orbs:
-  cloudformation: orbss/aws-cloudformation@0.1.4
+  cloudformation: orbss/aws-cloudformation@0.1.6
 
 workflows:
   version: 2
