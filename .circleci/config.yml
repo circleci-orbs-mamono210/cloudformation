@@ -81,6 +81,7 @@ workflows:
           requires:
             - cloudformation/describe-stacks
           stack-name: circleci-test-git-url
+          template-file-path: centos7-ubuntu18.yaml
           aws-access-key-id: AWS_ACCESS_KEY_ID2
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
           aws-region: AWS_DEFAULT_REGION

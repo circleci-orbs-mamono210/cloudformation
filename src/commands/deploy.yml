@@ -52,7 +52,6 @@
       description: |
         CloudFormation template file path
       type: string
-      default: ""
 
   steps:
     - run:

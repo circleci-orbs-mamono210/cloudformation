@@ -88,7 +88,6 @@
       description: |
         CloudFormation template file path
       type: string
-      default: ""
 
   steps:
     - aws-cli/install
