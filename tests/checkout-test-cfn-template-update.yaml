@@ -1,0 +1,145 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    ConstraintDescription: must be a valid EC2 instance type.
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
+Mappings:
+  StackConfigs:
+    VPC:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+    PublicSubnet:
+      AvailabilityZone: "ap-northeast-1a"
+      CidrBlock: 10.0.1.0/24
+      Name: "10.0.1.0 - ap-northeast-1a"
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !FindInMap [StackConfigs, VPC, CidrBlock]
+      EnableDnsSupport: !FindInMap [StackConfigs, VPC, EnableDnsSupport]
+      EnableDnsHostnames: !FindInMap [StackConfigs, VPC, EnableDnsHostnames]
+      Tags:
+      - Key: Name
+        Value: !Ref AWS::StackName
+
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: VPC
+      InternetGatewayId:
+        Ref: InternetGateway
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !FindInMap [StackConfigs, PublicSubnet, AvailabilityZone]
+      CidrBlock: !FindInMap [StackConfigs, PublicSubnet, CidrBlock]
+      MapPublicIpOnLaunch: 'true'
+      VpcId:
+        Ref: VPC
+      Tags:
+      - Key: Name
+        Value: !FindInMap [StackConfigs, PublicSubnet, Name]
+
+  centos7:
+    Type: AWS::EC2::Instance
+    DependsOn: InternetGateway
+    Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            DeleteOnTermination: true
+            VolumeType: gp2
+      ImageId: ami-045f38c93733dd48d
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      SecurityGroupIds:
+        - !Ref sshSG
+        - !Ref httpSG
+      SubnetId:
+        Ref: PublicSubnet
+      Tags:
+      - Key: Name
+        Value: !Ref AWS::StackName
+      - Key: ansible_inventory_group_name
+        Value: centos7
+      - Key: ansible_user
+        Value: centos
+      - Key: ansible_port
+        Value: 22
+
+  sshSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: ssh
+      GroupDescription: SSH access rule
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        FromPort: 2222
+        IpProtocol: tcp
+        ToPort: 2222
+      VpcId:
+        Ref: VPC
+
+  httpSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: http
+      GroupDescription: http access rule
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        FromPort: 80
+        IpProtocol: tcp
+        ToPort: 80
+      VpcId:
+        Ref: VPC
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: InternetGateway
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+      - Key: Name
+        Value: public
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGateway
+    Properties:
+      RouteTableId:
+        Ref: PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PublicSubnet
+      RouteTableId:
+        Ref: PublicRouteTable
+
+Outputs:
+  VpcId:
+    Value: !Ref VPC

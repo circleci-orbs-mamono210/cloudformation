@@ -8,11 +8,6 @@ workflows:
   version: 2
   test-checkout:
     jobs:
-      - orb-tools/pack
-      - orb-tools/publish-dev:
-          orb-name: orbss/aws-cloudformation
-          requires:
-            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-checkout
           template-file-path: tests/checkout-test-cfn-template.yaml
@@ -45,11 +40,6 @@ workflows:
 
   test-checkout-2:
     jobs:
-      - orb-tools/pack
-      - orb-tools/publish-dev:
-          orb-name: orbss/aws-cloudformation
-          requires:
-            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-checkout-2
           template-file-path: tests/checkout-test-cfn-template.yaml
@@ -60,6 +50,14 @@ workflows:
           requires:
             - cloudformation/create-stack
           stack-name: circleci-test-checkout-2
+      - cloudformation/deploy:
+          requires:
+            - cloudformation/describe-stacks
+          stack-name: circleci-test-checkout
+          template-file-path: tests/checkout-test-cfn-template-update.yaml
+          aws-access-key-id: AWS_ACCESS_KEY_ID2
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
+          aws-region: AWS_DEFAULT_REGION
       - cloudformation/delete-stack:
           requires:
             - cloudformation/describe-stacks
@@ -67,11 +65,6 @@ workflows:
 
   test-git-url:
     jobs:
-      - orb-tools/pack
-      - orb-tools/publish-dev:
-          orb-name: orbss/aws-cloudformation
-          requires:
-            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-git-url
           template-file-path: centos7-ubuntu18.yaml
@@ -96,11 +89,6 @@ workflows:
 
   test-git-url-2:
     jobs:
-      - orb-tools/pack
-      - orb-tools/publish-dev:
-          orb-name: orbss/aws-cloudformation
-          requires:
-            - orb-tools/pack
       - cloudformation/create-stack:
           stack-name: circleci-test-git-url-2
           template-file-path: centos7-ubuntu18.yaml
