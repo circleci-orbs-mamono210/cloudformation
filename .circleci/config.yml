@@ -15,8 +15,6 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY2
           aws-region: AWS_DEFAULT_REGION
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-          requires:
-            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
@@ -44,8 +42,6 @@ workflows:
           stack-name: circleci-test-checkout-2
           template-file-path: tests/checkout-test-cfn-template.yaml
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-          requires:
-            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
@@ -73,8 +69,6 @@ workflows:
           aws-region: AWS_DEFAULT_REGION
           git-url: https://github.com/aws-cloudformation-tm/ec2.git
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-          requires:
-            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
@@ -94,8 +88,6 @@ workflows:
           template-file-path: centos7-ubuntu18.yaml
           git-url: https://github.com/aws-cloudformation-tm/ec2.git
           extra-arguments: --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=centos7
-          requires:
-            - orb-tools/publish-dev
       - cloudformation/describe-stacks:
           requires:
             - cloudformation/create-stack
