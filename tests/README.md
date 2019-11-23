@@ -3,7 +3,7 @@
 ## create-stack
 
 | Parameter | Conditions | Rule1 | Rul2 |
-| ------------- |:-------------:| -----:|
+| ------------- |:-------------:| -----:| ----:|
 | aws-access-key-id | Default/String | Default | |
 | aws-region | Default/String | Default | |
 | aws-secret-access-key | Default/String | Default |     |
