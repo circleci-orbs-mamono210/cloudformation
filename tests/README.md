@@ -8,9 +8,9 @@
 | **aws-region** | *Default / String* | Default | |
 | **aws-secret-access-key** | *Default / String* | Default |     |
 | **branch** | *No Value / String* | No Value | |
-| **configure-default-region** | *True / False* | T |     |
-| **extra-arguments** | *No Value / String* | N | |
-| **git-url** | *No Value / String* | D |     |
-| **profile-name** | *Default / String* | D | |
-| **stack-name** | *String(Required)* | | |
-| **template-file-path** | *String(Required)* || |
+| **configure-default-region** | *True / False* | True |     |
+| **extra-arguments** | *No Value / String* | No Value | |
+| **git-url** | *No Value / String* | No Value |     |
+| **profile-name** | *Default / String* | Default | |
+| **stack-name** | *String(Required)* | String | |
+| **template-file-path** | *String(Required)* | String | |
