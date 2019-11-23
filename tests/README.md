@@ -3,7 +3,7 @@
 ## create-stack
 
 | Parameter | Value | Rule1 | Rul2 |
-| ---- |:----:| ----:| ----:|
+| ---- |:----:| :----:| ----:|
 | **aws-access-key-id** | *Default / String* | D | |
 | **aws-region** | *Default / String* | D | |
 | **aws-secret-access-key** | *Default / String* | D |     |
