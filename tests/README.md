@@ -4,7 +4,7 @@
 
 | Parameter | Value | Rule1 | Rule2 | Rule3 |
 | ---- |:----:|:----:|:----:|:----:|
-| **aws-access-key-id** | *Default / String* | D | D |
+| **aws-access-key-id** | *Default / String* | D | D | D |
 | **aws-region** | *Default / String* | D | D | D |
 | **aws-secret-access-key** | *Default / String* | D | D | D |
 | **branch** | *No Value / String* | N | N | N |
